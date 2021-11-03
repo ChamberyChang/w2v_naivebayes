@@ -1,5 +1,5 @@
 from Morphological_analysis import Morphological_analysis
-from gensim.models.word2vec import Word2Vec
+from gensim.models.word2vec import LineSentence, Word2Vec
 
 import sys
 
@@ -9,19 +9,20 @@ class CreateDataset:
     def __init__(self):
         pass
 
-    def create_w2v_model(self, corpus_path, corpus_seg_path, model_path):
+    def create_w2v_model(self, corpus_path, seg_path, model_path, vec_path):
         print ("Morphological Analysing...")
         x_data, y_data = self.create_data(corpus_path)
         morphological = Morphological_analysis()
         corpus = morphological.data_morphological(x_data)
-        with open(corpus_seg_path,'w',encoding='utf-8') as fW:
+        with open(seg_path,'w',encoding='utf-8') as fW:
             for i in range(len(corpus)):
                 fW.write(corpus[i])
                 fW.write('\n')
 
         print ("Training Word2Vec model...")
-        w2v_model = Word2Vec(corpus_seg_path, vector_size=100, window=5, min_count=1, workers=4)
+        w2v_model = Word2Vec(LineSentence(seg_path), vector_size=100, window=5, min_count=1, workers=4)
         w2v_model.save(model_path)
+        w2v_model.wv.save_word2vec_format(vec_path, binary=False)
 
     def create_dataset(self, train_path, test_path):
         df_train = pd.read_csv(train_path, header=None, encoding="utf-8")
@@ -58,9 +59,9 @@ class CreateDataset:
 
         print("=======================Dataset Summury============================")
         print("x_train : ", len(x_train))
-        print("x_train => ", x_train[0])
+        #print("x_train => ", x_train[0])
         print("x_test  : ", len(x_test))
-        print("x_test  => ", x_test[0])
+        #print("x_test  => ", x_test[0])
         print("==================================================================")
 
         return x_train, x_test, y_train, y_test
@@ -96,21 +97,15 @@ class CreateDataset:
         x_data, y_data = self.create_data(train_path)
         x_test, y_test = self.create_data(test_path)
 
-        x_data = morphological.train_morphological(x_data)
+        x_data = morphological.list_morphological(x_data)
 
         sys.stdout.flush()
         print("=======================Before  Dataset============================")
         print("x_train : ", len(x_data))
-        print("x_train => ", x_data[0])
+        #print("x_train => ", x_data[0])
         print("x_test  : ", len(x_test))
-        print("x_test  => ", x_test[0])
+        #print("x_test  => ", x_test[0])
         print("==================================================================")
-
-        """for x, y in zip(x_data, y_data):
-            print("\r" + "load data :" + str(load_count), end="")
-            sys.stdout.flush()
-            x_train.append(morphological.basic_to_result(x))
-            y_train.append(y)"""
 
         for x, y in zip(x_data, y_data):
             print(x)
@@ -132,9 +127,9 @@ class CreateDataset:
         print("data augment complete!")
         print("=======================Dataset Summury============================")
         print("x_train : ", len(x_train))
-        print("x_train => ", x_train[0])
+        #print("x_train => ", x_train[0])
         print("x_test  : ", len(x_test))
-        print("x_test  => ", x_test[0])
+        #print("x_test  => ", x_test[0])
         print("exception vocabrary :",exception_vocab)
         print("==================================================================")
 

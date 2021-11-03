@@ -29,6 +29,19 @@ train用とtest用のcsvファイルとtrainを拡張したときに生成され
 ` 文章　| 分類 `
 が連続してなるcsvで文章をデータ、分類を答えとして学習を行うようになっている。
 
+分類: 
+```
+"dokujo-tsushin",独女通信
+"it-life-hack",ITライフハック
+"kaden-channel",家電チャンネル
+"livedoor-homme",livedoor HOMME
+"movie-enter",MOVIE ENTER
+"peachy",Peachy
+"smax",エスマックス
+"sports-watch",Sports Watch
+"topic-news",トピックニュース
+```
+
  * result/result_report.xlsx
 
 testdataをpredictしてどれだけの精度なのか確かめるためのエクセルファイル。

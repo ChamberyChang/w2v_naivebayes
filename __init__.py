@@ -20,7 +20,7 @@ print("=========================================")
 train_path = "./dataset/train.csv"
 test_path  = "./dataset/test.csv"
 
-dataaugment = True
+dataaugment = False
 dataset = CreateDataset()
 model_path = "./w2v_model/word2vec.gensim.model"
 corpus_path = "./w2v_model/corpus.txt"

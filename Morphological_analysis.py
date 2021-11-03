@@ -5,7 +5,7 @@ class Morphological_analysis:
     def __init__(self):
         pass
 
-    def text_to_ward(self, text):
+    def text_to_seq(self, text):
         m = MeCab.Tagger("mecabrc")
         m.parse(" ")
 
@@ -37,7 +37,7 @@ class Morphological_analysis:
         result_word = " ".join(basic_word)
         return result_word
 
-    def list_to_ward(self, text):
+    def list_to_seq(self, text):
         m = MeCab.Tagger("mecabrc")
         m.parse(" ")
 
@@ -70,15 +70,14 @@ class Morphological_analysis:
         result_word = " ".join(basic)
         return result_word
 
-    def data_morphological(self, xtrain):
-        x_train = []
-        for x in xtrain:
-            x_train.append(self.text_to_ward(x))
-        return x_train
+    def data_morphological(self, text):
+        m_text = []
+        for x in text:
+            m_text.append(self.text_to_seq(x))
+        return m_text
     
-    def train_morphological(self, train):
-        train_data = []
-        for data in train:
-            train_data.append(self.list_to_ward(data))
-        
-        return train_data
+    def list_morphological(self, list):
+        m_data = []
+        for data in list:
+            m_data.append(self.list_to_seq(data))
+        return m_data
