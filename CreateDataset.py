@@ -1,4 +1,4 @@
-from Morphological_analysis import Morphological_analysis
+from MorphologicalAnalysis import MorphologicalAnalysis
 
 import sys
 
@@ -44,12 +44,12 @@ class CreateDataset:
         return x_train, y_train
 
     def data_augment_use_word2vec(self, model, train_path, test_path):
-        print("word2vec dataaugment...")
+        print("model data loading...")
 
         x_train , y_train = [], []
         load_count = 0
         exception_vocab = 0
-        morphological = Morphological_analysis()
+        morphological = MorphologicalAnalysis()
 
         x_data, y_data = self.create_data(train_path)
         x_test, y_test = self.create_data(test_path)

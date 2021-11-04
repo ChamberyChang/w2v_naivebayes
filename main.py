@@ -4,7 +4,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 from gensim import models
 
-from Morphological_analysis import Morphological_analysis
+from MorphologicalAnalysis import MorphologicalAnalysis
 from CreateDataset import CreateDataset
 from MakeLog import MakeLog
 from GenModel import GenModel
@@ -54,7 +54,7 @@ label = [
 #================================================================
 print("dataset loading...")
 print("dataset augment :", dataaugment)
-morphological = Morphological_analysis()
+morphological = MorphologicalAnalysis()
 
 if dataaugment:
     if os.path.exists(model_path):

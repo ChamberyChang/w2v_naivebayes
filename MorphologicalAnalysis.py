@@ -1,7 +1,7 @@
 import MeCab
 import neologdn
 
-class Morphological_analysis:
+class MorphologicalAnalysis:
     def __init__(self):
         pass
 

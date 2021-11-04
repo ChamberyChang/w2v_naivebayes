@@ -10,7 +10,7 @@
 * requirement.txt --- Environment requirement. (strictly required with newest Anaconda)
 * .gitignore --- gitignore
 * *CreateDataset.py* --- Read CSV file and setting class.
-* *Morphological_analysis.py* --- Morphological analyze with *MeCab*
+* *MorphologicalAnalysis.py* --- Morphological analyze with *MeCab*
 * *GenModel.py* --- Generate *word2vec* model. (Maybe used to generate other models)
 * *main.py* --- Run program by `python main.py`.
 * README.md --- You are reading this.
@@ -58,7 +58,7 @@ Report including Confuse Matrix, and Accuray, Precision, Recall, K-measure by *s
 2. `corpus_*` in *main.py* for generate models.
 3. `method` in *main.py* for change method between *tfidf*, *Bag Of word* and *tfidfvector*.
 4. `if elif` function the same as `label`.
-5. `MeCab.Tagger("mecabrc")` in *Morphological_analysis.py* if you want to use other dictionary.
+5. `MeCab.Tagger("mecabrc")` in *MorphologicalAnalysis.py* if you want to use other dictionary.
    
 ---------------------------------------------------
 ## License

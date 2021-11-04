@@ -1,6 +1,6 @@
 from gensim.models.word2vec import LineSentence, Word2Vec
 
-from Morphological_analysis import Morphological_analysis
+from MorphologicalAnalysis import MorphologicalAnalysis
 
 
 class GenModel:
@@ -10,7 +10,7 @@ class GenModel:
     def create_w2v_model(self, corpus_path, seg_path, model_path, vec_path):
         print ("Morphological Analysing...")
         # corpus_path, y_data = self.create_data(corpus_path)
-        morphological = Morphological_analysis()
+        morphological = MorphologicalAnalysis()
         corpus = morphological.data_morphological(corpus_path)
         with open(seg_path,'w',encoding='utf-8') as fW:
             for i in range(len(corpus)):
