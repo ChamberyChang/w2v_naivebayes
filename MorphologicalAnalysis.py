@@ -28,10 +28,12 @@ class MorphologicalAnalysis:
                 elif "助" in parts:
                     pass
                 elif "形容詞" in parts or "動詞" in parts:
+                    #basic_word.append(word)
+                    pass
+                elif "名詞" in parts:
                     basic_word.append(word)
                     pass
-                elif "名詞" in parts or "副詞" in parts:
-                    basic_word.append(word)
+                elif "副詞" in parts:
                     pass
 
         result_word = " ".join(basic_word)
@@ -60,10 +62,13 @@ class MorphologicalAnalysis:
                 elif "助" in parts:
                     pass
                 elif "形容詞" in parts or "動詞" in parts:
+                    #basic_word.append(word)
+                    pass
+                elif "名詞" in parts:
                     basic_word.append(word)
                     pass
-                elif "名詞" in parts or "副詞" in parts:
-                    basic_word.append(word)
+                elif "副詞" in parts:
+                    pass
         return basic_word
 
     def basic_to_result(self, basic):

@@ -4,6 +4,7 @@ import sys
 
 import pandas as pd
 
+
 class CreateDataset:
     def __init__(self):
         pass
@@ -43,8 +44,8 @@ class CreateDataset:
                 exit(1)
         return x_train, y_train
 
-    def data_augment_use_word2vec(self, model, train_path, test_path):
-        print("model data loading...")
+    def data_augment_use_word2vec(self, model, train_path, test_path, augment_path):
+        print("model data augmenting...")
 
         x_train , y_train = [], []
         load_count = 0
@@ -59,9 +60,7 @@ class CreateDataset:
         sys.stdout.flush()
         print("=======================Before  Dataset============================")
         print("x_train : ", len(x_data))
-        #print("x_train => ", x_data[0])
         print("x_test  : ", len(x_test))
-        #print("x_test  => ", x_test[0])
         print("==================================================================")
 
         for x, y in zip(x_data, y_data):
@@ -79,14 +78,13 @@ class CreateDataset:
             print(buff)
             x_train.append(buff)
             y_train.append(buff)
-
+        pd.DataFrame([x_train,y_train]).to_csv(augment_path)
         print("\n")
         print("data augment complete!")
+
         print("=======================Dataset Summury============================")
         print("x_train : ", len(x_train))
-        #print("x_train => ", x_train[0])
         print("x_test  : ", len(x_test))
-        #print("x_test  => ", x_test[0])
         print("exception vocabrary :",exception_vocab)
         print("==================================================================")
 

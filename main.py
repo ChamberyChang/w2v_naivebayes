@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, T
 
 from sklearn.naive_bayes import MultinomialNB
 
-from gensim import models
+from gensim.models import KeyedVectors
 
 from MorphologicalAnalysis import MorphologicalAnalysis
 from CreateDataset import CreateDataset
@@ -22,14 +22,13 @@ train_path = "./data/train.csv"
 test_path  = "./data/test.csv"
 
 dataaugment = True
-dataset = CreateDataset()
 model_path = "./models/chive-1.2-mc90.kv"
+augment_path = "./data/augment.csv"
 
 corpus_path = "./models/corpus.txt"
 corpus_seg_path ='./models/sentences.txt'
 corpus_vec_path = './models/vectors.txt'
 
-#method type
 # 0:tfidf
 # 1:Bag of Word
 # 2:tfidf vector
@@ -52,20 +51,31 @@ label = [
 #================================================================
 # generate dataset
 #================================================================
-print("dataset loading...")
-print("dataset augment :", dataaugment)
+print("loading...")
+print("data augment function :", dataaugment)
 morphological = MorphologicalAnalysis()
-
+dataset = CreateDataset()
 if dataaugment:
-    if os.path.exists(model_path):
+    if os.path.exists(augment_path):
+        print("augmented data found")
+        x_train, y_train = dataset.create_data(augment_path)
+        print("augmented data load succeed")
+        x_test_d, y_test = dataset.create_data(test_path)
+        xtest = morphological.data_morphological(x_test_d)
+    elif os.path.exists(model_path):
+        print("No augmented data found")
         # load the file if it has already been trained, to save repeating the slow training step below
-        # model = models.Word2Vec.load(model_path)
-        model = models.KeyedVectors.load(model_path)
+        # model = KeyedVectors.load_word2vec_format(model_path, binary=False, encoding="utf8", unicode_errors='ignore')
+        print("start model loading ......")
+        model = KeyedVectors.load(model_path, mmap ='r')
+        print("word2vec load succeed")
+        x_train, xtest, y_train, y_test = dataset.data_augment_use_word2vec(model, train_path, test_path, augment_path)
     else:
         # Train Word2Vec model.
         gen_model = GenModel()
         gen_model.create_w2v_model(corpus_path, corpus_seg_path, model_path, corpus_vec_path)
-    x_train, xtest, y_train, y_test = dataset.data_augment_use_word2vec(model, train_path, test_path)
+        model = KeyedVectors.load_word2vec_format(model_path, binary=False, encoding="utf8", unicode_errors='ignore')
+        x_train, xtest, y_train, y_test = dataset.data_augment_use_word2vec(model, train_path, test_path)
 else:
     x_data, y_train = dataset.create_data(train_path)
     x_test_d, y_test = dataset.create_data(test_path)
@@ -127,4 +137,5 @@ predict = estimator.predict(x_test)
 log = MakeLog(label)
 ans_df, data_count, eval_a, eval_p, eval_r, eval_f1 = log.evaluation(xtest, ytest, predict)
 set_df = log.eval_to_dataframe(train_path, test_path, data_count, eval_a, eval_p, eval_r, eval_f1, alpha)
-log.log_write("result/result.xlsx", ans_df, set_df)
+tab_df = log.history_to_pd(xtest, ytest, predict)
+log.log_write("result/result.xlsx", ans_df, set_df, tab_df)

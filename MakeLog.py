@@ -46,8 +46,24 @@ class MakeLog:
                                     ["alpha" , alpha],
         ])
         return setting_df
+
+    def table_to_pd(self, x_data, y_data, predict):
+        correct = 0
+        tab_df = pd.DataFrame(columns=["x_test", "answer", "predict", "TRUE"])
+        for x, y, prec in zip(x_data, y_data, predict):
+            answer_list = []
+            for data in y:
+                answer_list.append(self.decode(data))
+            if(self.decode(prec) in answer_list):
+                correct += 1
+            pd_buff = pd.Series([x, answer_list, self.decode(prec), (self.decode(prec) in answer_list)],index=ans_df.columns)
+            tab_df = tab_df.append(pd_buff, ignore_index=True)
+        
+        return tab_df
     
-    def log_write(self, file_path, ans_def, set_def):
+    def log_write(self, file_path, ans_def, set_def, tab_def):
+        ans_def.to_excel(file_path, sheet_name='evaluation')
         set_def.to_excel(file_path, sheet_name='set_data')
         with pd.ExcelWriter(file_path, engine="openpyxl", mode="a") as writer:
-            ans_def.to_excel(writer, sheet_name="result", index=False)
+            tab_def.to_excel(writer, sheet_name="result", index=False)
+            
