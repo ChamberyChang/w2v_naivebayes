@@ -18,16 +18,16 @@ print("=========================================")
 print("#         naivebayse initialize         #")
 print("=========================================")
 
-train_path = "./dataset/train.csv"
-test_path  = "./dataset/test.csv"
+train_path = "./data/train.csv"
+test_path  = "./data/test.csv"
 
 dataaugment = True
 dataset = CreateDataset()
-model_path = "./w2v_model/chive-1.2-mc15_gensim/chive-1.2-mc15.kv"
+model_path = "./models/chive-1.2-mc15_gensim/chive-1.2-mc15.kv"
 
-corpus_path = "./w2v_model/corpus.txt"
-corpus_seg_path ='./w2v_model/sentences.txt'
-corpus_vec_path = './w2v_model/vectors.txt'
+corpus_path = "./models/corpus.txt"
+corpus_seg_path ='./models/sentences.txt'
+corpus_vec_path = './models/vectors.txt'
 
 #method type
 # 0:tfidf

@@ -3,10 +3,10 @@
 ## File Directory
 
 
-* /dataset(ignore) --- Place for training data and test data. (CSV format)
+* /data(ignore) --- Place for training data and test data. (CSV format)
 
 * /result(ignore) --- Place for classified reports.(XLSX format)
-* /w2v_model(ignore) --- Place for generated models.
+* /models(ignore) --- Place for generated models.
 * requirement.txt --- Environment requirement. (strictly required with newest Anaconda)
 * .gitignore --- gitignore
 * *CreateDataset.py* --- Read CSV file and setting class.
