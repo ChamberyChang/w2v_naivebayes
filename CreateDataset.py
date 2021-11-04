@@ -1,5 +1,4 @@
 from Morphological_analysis import Morphological_analysis
-from gensim.models.word2vec import LineSentence, Word2Vec
 
 import sys
 
@@ -11,9 +10,9 @@ class CreateDataset:
 
     def create_w2v_model(self, corpus_path, seg_path, model_path, vec_path):
         print ("Morphological Analysing...")
-        x_data, y_data = self.create_data(corpus_path)
+        # corpus_path, y_data = self.create_data(corpus_path)
         morphological = Morphological_analysis()
-        corpus = morphological.data_morphological(x_data)
+        corpus = morphological.data_morphological(corpus_path)
         with open(seg_path,'w',encoding='utf-8') as fW:
             for i in range(len(corpus)):
                 fW.write(corpus[i])
@@ -24,48 +23,6 @@ class CreateDataset:
         w2v_model.save(model_path)
         w2v_model.wv.save_word2vec_format(vec_path, binary=False)
 
-    def create_dataset(self, train_path, test_path):
-        df_train = pd.read_csv(train_path, header=None, encoding="utf-8")
-        df_test = pd.read_csv(test_path, header=None, encoding="utf-8")
-        x_train_list, y_train_list = [], []
-        x_test_list, y_test_list = [], []
-        x_train, y_train = [], []
-        x_test, y_test = [], []
-
-        x_train_list = df_train.iloc[:,0].values.tolist()
-        y_train_list = df_train.iloc[:,1].values.tolist()
-        x_test_list = df_test.iloc[:,0].values.tolist()
-        y_test_list = df_test.iloc[:,1].values.tolist()
-
-        for x, y in zip(x_train_list, y_train_list):
-            x_train.append(str(x))
-            if "" in y:
-                y_train.append(0)
-            elif "" in y:
-                y_train.append(1)
-            else:
-                print("Some data should not exist")
-                exit(1)
-
-        for x, y in zip(x_test_list, y_test_list):
-            x_test.append(str(x))
-            if "" in y:
-                y_test.append(0)
-            elif "" in y:
-                y_test.append(1)
-            else:
-                print("Some data should not exist")
-                exit(1)
-
-        print("=======================Dataset Summury============================")
-        print("x_train : ", len(x_train))
-        #print("x_train => ", x_train[0])
-        print("x_test  : ", len(x_test))
-        #print("x_test  => ", x_test[0])
-        print("==================================================================")
-
-        return x_train, x_test, y_train, y_test
-
     def create_data(self, train_path):
         x_train_list, y_train_list = [], []
         x_train, y_train = [], []
@@ -75,12 +32,27 @@ class CreateDataset:
         x_train_list = df_train.iloc[:,0].values.tolist()
         y_train_list = df_train.iloc[:,1].values.tolist()
 
+        # change here as same as the order of labels
         for x, y in zip(x_train_list, y_train_list):
             x_train.append(str(x))
-            if "" in y:
+            if "dokujo-tsushin" in y:
                 y_train.append(0)
-            elif "" in y:
+            elif "it-life-hack" in y:
                 y_train.append(1)
+            elif "kaden-channel" in y:
+                y_train.append(2)
+            elif "livedoor-homme" in y:
+                y_train.append(3)
+            elif "movie-enter" in y:
+                y_train.append(4)
+            elif "peachy" in y:
+                y_train.append(5)
+            elif "smax" in y:
+                y_train.append(6)
+            elif "sports-watch" in y:
+                y_train.append(7)
+            elif "topic-news" in y:
+                y_train.append(8)
             else:
                 print("Some data should not exist")
                 exit(1)

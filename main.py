@@ -2,11 +2,12 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, T
 
 from sklearn.naive_bayes import MultinomialNB
 
-from gensim.models.word2vec import Word2Vec
+from gensim import models
 
 from Morphological_analysis import Morphological_analysis
 from CreateDataset import CreateDataset
 from MakeLog import MakeLog
+from GenModel import GenModel
 
 import os
 
@@ -20,17 +21,13 @@ print("=========================================")
 train_path = "./dataset/train.csv"
 test_path  = "./dataset/test.csv"
 
-dataaugment = False
+dataaugment = True
 dataset = CreateDataset()
-model_path = "./w2v_model/word2vec.gensim.model"
+model_path = "./w2v_model/chive-1.2-mc15_gensim/chive-1.2-mc15.kv"
+
 corpus_path = "./w2v_model/corpus.txt"
 corpus_seg_path ='./w2v_model/sentences.txt'
-if os.path.exists(model_path):
-    # load the file if it has already been trained, to save repeating the slow training step below
-    model = Word2Vec.load(model_path)
-else:
-    # Train Word2Vec model.
-    dataset.create_w2v_model(corpus_path, corpus_seg_path, model_path)
+corpus_vec_path = './w2v_model/vectors.txt'
 
 #method type
 # 0:tfidf
@@ -38,15 +35,19 @@ else:
 # 2:tfidf vector
 method = 0
 
-#Evaluation type
-# 0:default
-# 1:Evaluation method considering similarity
-evaluation = 1
-
 alpha = 0.1
 
 label = [
-        "test", "test2"]
+    "独女通信",
+    "ITライフハック",
+    "家電チャンネル",
+    "livedoor HOMME",
+    "MOVIE ENTER",
+    "Peachy",
+    "エスマックス",
+    "Sports Watch",
+    "トピックニュース"
+]
 
 #================================================================
 # generate dataset
@@ -56,34 +57,40 @@ print("dataset augment :", dataaugment)
 morphological = Morphological_analysis()
 
 if dataaugment:
+    if os.path.exists(model_path):
+        # load the file if it has already been trained, to save repeating the slow training step below
+        # model = models.Word2Vec.load(model_path)
+        model = models.KeyedVectors.load(model_path)
+    else:
+        # Train Word2Vec model.
+        gen_model = GenModel()
+        gen_model.create_w2v_model(corpus_path, corpus_seg_path, model_path, corpus_vec_path)
     x_train, xtest, y_train, y_test = dataset.data_augment_use_word2vec(model, train_path, test_path)
 else:
-    x_data, x_test, y_train, y_test = dataset.create_dataset(train_path, test_path)
+    x_data, y_train = dataset.create_data(train_path)
+    x_test_d, y_test = dataset.create_data(test_path)
     x_train = morphological.data_morphological(x_data)
-    xtest = morphological.data_morphological(x_test)
+    xtest = morphological.data_morphological(x_test_d)
 print("dataset load complete.")
 #================================================================
-# evaluate
+# alignation
 #================================================================
-if evaluation == 1:
-    print("Use a special evaluation method.")
-    xx_test, yy_test = [], []
-    test_size = len(xtest)
-    index = -1
 
-    for count in range(0, test_size):
-        if xtest[count] in xx_test:
-            yy_test[index].append(y_test[count])
-        else:
-            index += 1
-            yy_test.append([])
-            yy_test[index].append(y_test[count])
-            xx_test.append(xtest[count])
-    xtest = xx_test
-    y_test = yy_test
-else:
-    print("Use the usual evaluation method.")
+print("Use a coffusion matrix evaluation method.")
+xx_test, yy_test = [], []
+test_size = len(xtest)
+index = -1
 
+for count in range(0, test_size):
+    if xtest[count] in xx_test:
+        yy_test[index].append(y_test[count])
+    else:
+        index += 1
+        yy_test.append([])
+        yy_test[index].append(y_test[count])
+        xx_test.append(xtest[count])
+xtest = xx_test
+ytest = yy_test
 #================================================================
 # Naivebayse
 #================================================================
@@ -111,23 +118,13 @@ elif method == 2:
     x_test = X_tfidf[train_size:, :]
 
 print("Multinomial Naivebayse use...")
-clf = MultinomialNB(alpha=alpha, class_prior=None, fit_prior=True)
-clf.fit(x_train, y_train)
-predict = clf.predict(x_test)
+estimator = MultinomialNB(alpha=alpha, class_prior=None, fit_prior=True)
+estimator.fit(x_train, y_train)
+predict = estimator.predict(x_test)
 #================================================================
 # report log
 #================================================================
 log = MakeLog(label)
-if evaluation == 1:
-    ans_df, data_count, correct = log.evaluation_to_pd(xtest, y_test, predict)
-    set_df = log.setdata_evaluation_to_pd(train_path, test_path, data_count, correct, evaluation, method, alpha, dataaugment)
-else:
-    train_acc = clf.score(x_train, y_train)
-    test_acc = clf.score(x_test, y_test)
-    print("==================== summury =====================")
-    print("train accracy : ", train_acc)
-    print("test  accracy : ", test_acc)
-    print("===================================================")
-    ans_df = log.history_to_pd(xtest, y_test, predict)
-    set_df = log.setting_to_pd(train_path, test_path, train_acc, test_acc, evaluation, method, alpha, dataaugment)
-log.log_write("result/result_report.xlsx", ans_df, set_df)
+ans_df, data_count, eval_a, eval_p, eval_r, eval_f1 = log.evaluation(xtest, ytest, predict)
+set_df = log.eval_to_dataframe(train_path, test_path, data_count, eval_a, eval_p, eval_r, eval_f1, alpha)
+log.log_write("result/result.xlsx", ans_df, set_df)

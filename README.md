@@ -1,95 +1,67 @@
-# ---naivebayes program---
+# NaiveBayes Classifier for Japanese Language
 
-ナイーブベイズ分類器の学習のために作成したプログラム。
-写経に近いかも
+## File Directory
 
-## システム概要
 
-ナイーブベイズ分類器をpythonのパッケージskleanを利用して作成する。
+* /dataset(ignore) --- Place for training data and test data. (CSV format)
 
-## ファイル構成
-
-* /CreateDataset --- 作成したcsvファイルを読み取りデータセットを作成するclass。
-* /dataset(ignore) --- 学習用のデータセットと、テストのデータセットを入れておく。
-* /Morphological --- データを読み取り形態素解析を行うclass。
-* /result(ignore) --- classification_reportなどの実行結果ログを保存する場所
-* /setting --- pipのrequire.txtを入れてある。バージョン管理用テキストファイル
-* /word2vec_model(ignore) --- word2vecの学習済みモデルが格納されている
-* .gitignore     --- gitignoreファイル
-* *data_augment.py(現在動きません)* --- googletransのデータ拡張用のファイル。
-* *naivebayse.py* --- 実行のメインファイル。これを実行することでナイーブベイズが行われる。
-* README.mb     --- readmeファイル
-
+* /result(ignore) --- Place for classified reports.(XLSX format)
+* /w2v_model(ignore) --- Place for generated models.
+* requirement.txt --- Environment requirement. (strictly required with newest Anaconda)
+* .gitignore --- gitignore
+* *CreateDataset.py* --- Read CSV file and setting class.
+* *Morphological_analysis.py* --- Morphological analyze with *MeCab*
+* *GenModel.py* --- Generate *word2vec* model. (Maybe used to generate other models)
+* *main.py* --- Run program by `python main.py`.
+* README.md --- You are reading this.
 ---------------------------------------------------
-* **gitignoreしたもの**
- * /detaset
-
-train用とtest用のcsvファイルとtrainを拡張したときに生成されるcsvファイル。
-これは
-` 文章　| 分類 `
-が連続してなるcsvで文章をデータ、分類を答えとして学習を行うようになっている。
-
-分類: 
+CSV file requirement
 ```
-"dokujo-tsushin",独女通信
-"it-life-hack",ITライフハック
-"kaden-channel",家電チャンネル
-"livedoor-homme",livedoor HOMME
-"movie-enter",MOVIE ENTER
-"peachy",Peachy
-"smax",エスマックス
-"sports-watch",Sports Watch
-"topic-news",トピックニュース
-```
+ "Article1", "Category1"
+ "Article2", "Category1"
+ "Article3", "Category2" 
+ ...
+ ```
 
+CSV Example 
+```
+"独女通信", dokujo-tsushin
+"ITライフハック", it-life-hack
+"家電チャンネル", kaden-channel
+"livedoor HOMME", livedoor-homme
+"MOVIE ENTER", movie-enter
+"Peachy", peachy
+"エスマックス", smax
+"Sports Watch", sports-watch
+"トピックニュース", topic-news
+```
+| Article         | Category        |
+| --------------- | --------------- | 
+| 独女通信  | dokujo-tsushin | 
+| ITライフハック | it-life-hack | 
+| 家電チャンネル | kaden-channel | 
+| livedoor HOMME | livedoor-homme |
+| MOVIE ENTER | movie-enter |
+| Peachy | peachy |
+| エスマックス | smax |
+| Sports Watch | sports-watch |
+| トピックニュース | topic-news |
+---------------------------------------------------
  * result/result_report.xlsx
 
-testdataをpredictしてどれだけの精度なのか確かめるためのエクセルファイル。
-
-* /word2vec_model
-
-word2vecのモデルが格納されているフォルダ
+Report including Confuse Matrix, and Accuray, Precision, Recall, K-measure by *sklean.metrics*
 
 ---------------------------------------------------
-## 実行方法
+## All you need to customize
 
-Pythonファイルのnaivebayse.pyがあるディレクトリで
-
-`python __init__.py`
-
-を実行することでプログラムが動作する。
-
+1. `train_path`, `test_path`, `model_path`, `label` in *main.py* for work.
+2. `corpus_*` in *main.py* for generate models.
+3. `method` in *main.py* for change method between *tfidf*, *Bag Of word* and *tfidfvector*.
+4. `if elif` function the same as `label`.
+5. `MeCab.Tagger("mecabrc")` in *Morphological_analysis.py* if you want to use other dictionary.
+   
 ---------------------------------------------------
-## 処理の手順
-
-1. まずデータセットを呼び出す。
-2. 形態素解析を行う。
-3. tfidf, Bag Of word, tfidfvectorの中から選択したもので数値に変換する。
-4. skleanのMultinomialNBにかける。
-5. predictを行って、結果からログをエクセル形式で作成する
-
----------------------------------------------------
-## データ拡張について
-
-### `word2vecを利用したデータ拡張`
-
-上気した通りデータ数が少ないため、データ拡張を行う。
-こっちの方法はword2vecを利用して
-
-1. 一つの文章を形態素解析する。
-2. 形態素解析した結果の品詞一つをword2vecにかけ類似した単語(文や人の場合もある)を出力する。
-3. 類似した単語を連結し、データ拡張に追加。
-4. 学習を行う。
-
----------------------------------------------------
-## 評価方法について
-
-ナイーブベイズ分類器にかけた際に、accuracyがあまり上がらないという現象が発生した。
-これはカテゴリーを分ける際に複数のカテゴリーをまたいでいるデータが多数あったため起きた問題だということがわかった。
-そこで複数のカテゴリーにまたいだものはその中からどれか一つでも判別することができていた場合、accuracyに数値を与えることにする。
-
-ただこの評価法は適切ではない部分があるため選択肢として与えることとした。
-`evoluationの数値変更で評価方法の変更が可能になった。`
-(まあ数値が低かったので救済的な部分が大きい。)
-
-近似しているカテゴリーが存在している場合、この評価方法の変更によって近似している部分での誤判定か確認をすることができる。
+## License
+```
+chiVe    (Apache License 2.0)
+```

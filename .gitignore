@@ -1,7 +1,7 @@
 
 *.pyc
 *.csv
-result/result_report.xlsx
+result/result.xlsx
 w2v_model/*
 *.npy
 *.zip
