@@ -23,7 +23,7 @@ test_path  = "./data/test.csv"
 
 dataaugment = True
 dataset = CreateDataset()
-model_path = "./models/chive-1.2-mc15_gensim/chive-1.2-mc15.kv"
+model_path = "./models/chive-1.2-mc90.kv"
 
 corpus_path = "./models/corpus.txt"
 corpus_seg_path ='./models/sentences.txt'
