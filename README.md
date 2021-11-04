@@ -3,8 +3,7 @@
 ## File Directory
 
 
-* /data(ignore) --- Place for training data and test data. (CSV format)
-
+* /data(ignore) --- Place for training data, test data and augmented data. (CSV format)
 * /result(ignore) --- Place for classified reports.(XLSX format)
 * /models(ignore) --- Place for generated models.
 * requirement.txt --- Environment requirement. (strictly required with newest Anaconda)

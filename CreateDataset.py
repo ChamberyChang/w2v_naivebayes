@@ -64,23 +64,23 @@ class CreateDataset:
         print("==================================================================")
 
         for x, y in zip(x_data, y_data):
-            print(x)
+            print("input :", x)
             x_train.append(morphological.basic_to_result(x))
             y_train.append(y)
-            buff = []
+            cache = []
             for count, text in enumerate(x):
                 try:
                     r = model.most_similar(positive=[text])
-                    buff.append(r[0][0])
+                    cache.append(r[0][0])
                 except :
                     exception_vocab += 1
                     pass
-            print(buff)
-            x_train.append(buff)
-            y_train.append(buff)
-        pd.DataFrame([x_train,y_train]).to_csv(augment_path)
+            print("augmented :", cache)
+            x_train.append(cache)
+            y_train.append(cache)
+        pd.DataFrame([x_train, y_train]).to_csv(augment_path)
         print("\n")
-        print("data augment complete!")
+        print("data augmenting complete!")
 
         print("=======================Dataset Summury============================")
         print("x_train : ", len(x_train))
