@@ -24,7 +24,7 @@ class MorphologicalAnalysis:
                 if "記号" in parts:
                     if word != "。":
                         continue    
-                    basic_word.append(word)
+                    #basic_word.append(word)
                 elif "助" in parts:
                     pass
                 elif "形容詞" in parts or "動詞" in parts:
@@ -58,7 +58,7 @@ class MorphologicalAnalysis:
                 if "記号" in parts:
                     if word != "。":
                         continue    
-                    basic_word.append(word)
+                    #basic_word.append(word)
                 elif "助" in parts:
                     pass
                 elif "形容詞" in parts or "動詞" in parts:
