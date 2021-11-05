@@ -48,14 +48,14 @@ CSV Example
 ---------------------------------------------------
  * result/result_report.xlsx
 
-Report including Confuse Matrix, and Accuray, Precision, Recall, K-measure by *sklean.metrics*
+Report including Confusion Matrix, and Accuray, Precision, Recall, K-measure by *sklean.metrics*
 
 ---------------------------------------------------
 ## All you need to customize
 
 1. `train_path`, `test_path`, `model_path`, `label` in *main.py* for work.
 2. `corpus_*` in *main.py* for generate models.
-3. `method` in *main.py* for change method between *tfidf*, *Bag Of word* and *tfidfvector*.
+3. `method` in *main.py* for change method between *tfidf*, *Countvector* and *tfidfvector*.
 4. `if elif` function the same as `label`.
 5. `MeCab.Tagger("mecabrc")` in *MorphologicalAnalysis.py* if you want to use other dictionary.
    

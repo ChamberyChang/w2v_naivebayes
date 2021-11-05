@@ -11,13 +11,11 @@ class MakeLog:
         eval_p = 0
         eval_r = 0
         eval_f1 = 0
-        print(y_data)
-        print(predict)
         data_count = len(x_data)
         
         c_mat = metrics.confusion_matrix(y_data, predict)
-        ans_df = pd.DataFrame(c_mat)
-        print(ans_df)
+        cm_df = pd.DataFrame(c_mat)
+        print(cm_df)
 
         eval_a = metrics.accuracy_score(y_data, predict)
         eval_p = metrics.precision_score(y_data, predict, average="micro")
@@ -32,20 +30,20 @@ class MakeLog:
         print("f-measure :", eval_f1)
         print("===================================================")
         
-        return ans_df, data_count, eval_a, eval_p, eval_r, eval_f1
+        return cm_df, data_count, eval_a, eval_p, eval_r, eval_f1
     
     def eval_to_dataframe(self, train_path, test_path, data_count, eval_a, eval_p, eval_r, eval_f1, alpha):
-        setting_df = pd.DataFrame([
-                                    ["train file", train_path],
-                                    ["test file" , test_path],
-                                    ["number of data" , data_count],
-                                    ["accuracy"  , eval_a],
-                                    ["precision", eval_p],
-                                    ["recall" , eval_r],
-                                    ["f-measure :" , eval_f1],
-                                    ["alpha" , alpha],
+        eval_df = pd.DataFrame([
+                        ["train file", train_path],
+                        ["test file" , test_path],
+                        ["number of data" , data_count],
+                        ["accuracy"  , eval_a],
+                        ["precision", eval_p],
+                        ["recall" , eval_r],
+                        ["f-measure :" , eval_f1],
+                        ["alpha" , alpha],
         ])
-        return setting_df
+        return eval_df
 
     def table_to_pd(self, x_data, y_data, predict):
         correct = 0
@@ -53,17 +51,18 @@ class MakeLog:
         for x, y, prec in zip(x_data, y_data, predict):
             answer_list = []
             for data in y:
-                answer_list.append(self.decode(data))
-            if(self.decode(prec) in answer_list):
+                answer_list.append(self.label[data])
+            if(self.label[prec] in answer_list):
                 correct += 1
-            pd_buff = pd.Series([x, answer_list, self.decode(prec), (self.decode(prec) in answer_list)],index=ans_df.columns)
+            pd_buff = pd.Series([x, answer_list, self.label[prec], (self.label[prec] in answer_list)],index=tab_df.columns)
             tab_df = tab_df.append(pd_buff, ignore_index=True)
         
         return tab_df
     
-    def log_write(self, file_path, ans_def, set_def, tab_def):
-        ans_def.to_excel(file_path, sheet_name='evaluation')
-        set_def.to_excel(file_path, sheet_name='set_data')
+    def log_write(self, file_path, cm_def, eval_def, tab_def):
+        cm_def.to_excel(file_path, sheet_name='confusion_matrix')
         with pd.ExcelWriter(file_path, engine="openpyxl", mode="a") as writer:
             tab_def.to_excel(writer, sheet_name="result", index=False)
+            eval_def.to_excel(writer, sheet_name='evaluation', index=False, header=False)
+        print("Generating result complete!")
             

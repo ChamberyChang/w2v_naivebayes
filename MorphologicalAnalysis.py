@@ -71,17 +71,23 @@ class MorphologicalAnalysis:
                     pass
         return basic_word
 
-    def basic_to_result(self, basic):
-        result_word = " ".join(basic)
+    def basic_to_result(self, basic_word):
+        result_word = " ".join(basic_word)
         return result_word
 
-    def data_morphological(self, text):
+    def seq_recover_list(self, list):
+        m_data = []
+        for data in list:
+            m_data.append(data.split(" "))
+        return m_data
+
+    def data_morph(self, text):
         m_text = []
         for x in text:
             m_text.append(self.text_to_seq(x))
         return m_text
     
-    def list_morphological(self, list):
+    def list_morph(self, list):
         m_data = []
         for data in list:
             m_data.append(self.list_to_seq(data))
