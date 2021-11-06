@@ -19,7 +19,7 @@ class Config:
                 data = {"data": {"train_path": "./data/","test_path": "./data/"},"augment":{"dataaugment": False,"model_path": "./models/","augment_path": "./data/augment/"},"models":{"corpus_path": "./models/corpus.txt","corpus_seg_out": "./models/sentences.txt","corpus_vec_out": "./models/vectors.txt"},"run":{"method": 0,"alpha": 0.1,"labels": [],"result_path": "./result/"}}
                 json_file.write(json.dumps(data, indent=4))
                 print("A new config file has been generated")
-                pass       
+                exit(1)    
         with open(self.configpath) as json_file:
             try:
                 with open('./config.json','r',encoding='utf8')as fp:
