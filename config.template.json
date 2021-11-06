@@ -1,6 +1,6 @@
 {
     "data": {
-        "train_path": "./data/test.csv",
+        "train_path": "./data/train.csv",
         "test_path": "./data/test.csv"
     },
     "augment": {
