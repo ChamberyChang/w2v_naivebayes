@@ -28,7 +28,7 @@ class MorphologicalAnalysis:
                 elif "助" in parts:
                     pass
                 elif "形容詞" in parts or "動詞" in parts:
-                    #basic_word.append(word)
+                    basic_word.append(word)
                     pass
                 elif "名詞" in parts:
                     basic_word.append(word)
