@@ -6,6 +6,8 @@
 * /data(ignore) --- Place for training data, test data and augmented data. (CSV format)
 * /result(ignore) --- Place for classified reports.(XLSX format)
 * /models(ignore) --- Place for generated models.
+* config.json(ignore) --- configuration file
+* config.template.json --- configuration file template
 * requirement.txt --- Environment requirement. (strictly required with newest Anaconda)
 * .gitignore --- gitignore
 * *CreateDataset.py* --- Read CSV file and setting class.
@@ -51,12 +53,13 @@ CSV Example
 Report including Confusion Matrix, and Accuray, Precision, Recall, K-measure by *sklean.metrics*
 
 ---------------------------------------------------
-## All you need to customize
-
-1. `train_path`, `test_path`, `model_path`, `label` in *main.py* for work.
-2. `corpus_*` in *main.py* for generate models.
-3. `method` in *main.py* for change method between *tfidf*, *Countvector* and *tfidfvector*.
-4. `if elif` function the same as `label`.
+## Configuration
+All you need to customize is the `config.json`, and `config.template.json` is the template.
+You can run the program to generate the default structure.
+1. `train_path`, `test_path`, `model_path`, `augment_path`, `label`, `result_path`
+2. `corpus_*` for generate models.
+3. `method` for change method between *tfidf*, *Countvector* and *tfidfvector*.
+4. `dataaugment` to switch the word augmenting with model option.
 5. `MeCab.Tagger("mecabrc")` in *MorphologicalAnalysis.py* if you want to use other dictionary.
    
 ---------------------------------------------------

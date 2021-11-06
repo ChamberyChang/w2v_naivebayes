@@ -1,0 +1,32 @@
+{
+    "data": {
+        "train_path": "./data/test.csv",
+        "test_path": "./data/test.csv"
+    },
+    "augment": {
+        "dataaugment": true,
+        "model_path": "./models/chive-1.2-mc90.kv",
+        "augment_path": "./data/augment.csv"
+    },
+    "models": {
+        "corpus_path": "./models/corpus.txt",
+        "corpus_seg_out": "./models/sentences.txt",
+        "corpus_vec_out": "./models/vectors.txt"
+    },
+    "run": {
+        "method": 0,
+        "alpha": 0.1,
+        "labels": [
+            "独女通信",
+            "ITライフハック",
+            "家電チャンネル",
+            "livedoor HOMME",
+            "MOVIE ENTER",
+            "Peachy",
+            "エスマックス",
+            "Sports Watch",
+            "トピックニュース"
+        ],
+        "result_path": "./result/result.xlsx"
+    }
+}

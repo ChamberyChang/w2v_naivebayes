@@ -18,29 +18,15 @@ class ProcessData:
         x_data_list = df_data.iloc[:,0].values.tolist()
         y_data_list = df_data.iloc[:,1].values.tolist()
 
-        # change here as same as the order of labels
         for x, y in zip(x_data_list, y_data_list):
             x_data.append(str(x))
-            if self.label[0] in y:
-                y_data.append(0)
-            elif self.label[1] in y:
-                y_data.append(1)
-            elif self.label[2] in y:
-                y_data.append(2)
-            elif self.label[3] in y:
-                y_data.append(3)
-            elif self.label[4] in y:
-                y_data.append(4)
-            elif self.label[5] in y:
-                y_data.append(5)
-            elif self.label[6] in y:
-                y_data.append(6)
-            elif self.label[7] in y:
-                y_data.append(7)
-            elif self.label[8] in y:
-                y_data.append(8)
+
+            for i,e in enumerate(self.label):
+                if e in y:
+                    y_data.append(i)
+                    break
             else:
-                print("Some data should not exist")
+                print("Some data should not exist")    
                 exit(1)
         return x_data, y_data
 
