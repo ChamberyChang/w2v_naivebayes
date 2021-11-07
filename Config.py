@@ -9,21 +9,17 @@ class Config:
         else:
             self.configpath = "./config.json"
 
-    def store(self, data):
-        with open(self.configpath, 'w') as json_file:
-            json_file.write(json.dumps(data, indent=4))
-
     def load(self):
         if not os.path.exists(self.configpath):
-            with open(self.configpath, 'w') as json_file:
-                data = {"data": {"train_path": "./data/","test_path": "./data/"},"augment":{"dataaugment": False,"model_path": "./models/","augment_path": "./data/augment/"},"models":{"corpus_path": "./models/corpus.txt","corpus_seg_out": "./models/sentences.txt","corpus_vec_out": "./models/vectors.txt"},"run":{"method": 0,"alpha": 0.1,"labels": [],"result_path": "./result/"}}
-                json_file.write(json.dumps(data, indent=4))
-                print("A new config file has been generated")
-                exit(1)    
-        with open(self.configpath) as json_file:
+            with open('./config.template.json', 'r', encoding='utf8')as fp:
+                data = json.load(fp)
+            with open(self.configpath, 'w', encoding='utf8') as json_file:
+                json_file.write(json.dumps(data, indent=4, ensure_ascii=False))
+            print("A new config file has been generated")
+            exit(1)    
+        with open(self.configpath, 'r', encoding='utf8')as fp:
             try:
-                with open('./config.json','r',encoding='utf8')as fp:
-                    data = json.load(fp)
+                data = json.load(fp)
                 #print("Configuration loaded", type(data))
             except:
                 data = {}
