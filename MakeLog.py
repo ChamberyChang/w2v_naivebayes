@@ -18,9 +18,9 @@ class MakeLog:
         print(cm_df)
 
         eval_a = metrics.accuracy_score(y_data, predict)
-        eval_p = metrics.precision_score(y_data, predict, average="micro")
-        eval_r = metrics.recall_score(y_data, predict, average="micro")
-        eval_f1 = metrics.f1_score(y_data, predict, average="micro")
+        eval_p = metrics.precision_score(y_data, predict, average="macro")
+        eval_r = metrics.recall_score(y_data, predict, average="macro")
+        eval_f1 = metrics.f1_score(y_data, predict, average="macro")
 
         print("============= evaluation summury ==================")
         print("number of data :", data_count)
