@@ -40,7 +40,7 @@ class MakeLog:
                         ["accuracy"  , eval_a],
                         ["precision", eval_p],
                         ["recall" , eval_r],
-                        ["f-measure :" , eval_f1],
+                        ["f-measure" , eval_f1],
                         ["alpha" , alpha],
         ])
         return eval_df
