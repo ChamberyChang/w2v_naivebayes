@@ -10,7 +10,9 @@
 * config.template.json --- configuration file template
 * requirement.txt --- Environment requirement. (strictly required with newest Anaconda)
 * .gitignore --- gitignore
-* *CreateDataset.py* --- Read CSV file and setting class.
+* *Config.py* --- Read configuration file.
+* *ProcessData.py* --- Read CSV file.
+* *ReprocessData.py* --- Read augmented CSV file and re-process new augmented data.
 * *MorphologicalAnalysis.py* --- Morphological analyze with *MeCab*
 * *GenModel.py* --- Generate *word2vec* model. (Maybe used to generate other models)
 * *main.py* --- Run program by `python main.py`.
