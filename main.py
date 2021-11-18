@@ -108,7 +108,7 @@ class Naivebayes:
     def naivebayse(self, x_train, y_train, xtest, alpha, config_file=None):
         config = Config(config_file).load()
         # 0:tfidf
-        # 1:Countvector
+        # 1:bag of words
         # 2:tfidf vector
         method = config['run']['method']
         
@@ -125,7 +125,7 @@ class Naivebayes:
             x_train = tfidf[:train_size, :]
             x_test = tfidf[train_size:, :]
         elif method == 1:
-            print("Use Countvector method...")
+            print("Use BOW method...")
             x_train = wc[:train_size, :]
             x_test = wc[train_size:, :]
         elif method == 2:
